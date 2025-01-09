@@ -23,8 +23,6 @@ const App: React.FC = () => {
       }
       const provider = new ethers.BrowserProvider(window.ethereum);
       const accounts: string[] = await provider.send("eth_requestAccounts", []);
-      console.log(await provider.getBlockNumber());
-      console.log(await provider.listAccounts());
 
       if (accounts.length === 0) {
         setError("No wallet connected!");
@@ -52,16 +50,16 @@ const App: React.FC = () => {
         return;
       }
 
-      // ERC-20 tokens and ABI
+      // ERC-20 tokens
       const tokens = [
         {
-          address: "0x1234567890abcdef1234567890abcdef12345678",
-          name: "Mock DAI",
-        }, // Replace with real Sepolia addresses if available
+          address: "0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0",
+          name: "USDT",
+        },
         {
-          address: "0xabcdefabcdefabcdefabcdefabcdefabcdefabcdef",
-          name: "Mock USDC",
-        }, // Replace with real Sepolia addresses if available
+          address: "0x779877A7B0D9E8603169DdbD7836e478b4624789",
+          name: "LINK",
+        },
       ];
       const ERC20_ABI = [
         "function balanceOf(address owner) view returns (uint256)",
@@ -69,9 +67,8 @@ const App: React.FC = () => {
         "function symbol() view returns (string)",
       ];
 
-      // Initialize provider
       const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner(); // Ensure wallet is connected
+      const signer = await provider.getSigner();
 
       // Fetch balances
       const balances = await Promise.all(
@@ -82,17 +79,11 @@ const App: React.FC = () => {
               ERC20_ABI,
               signer
             );
+            // console.log(contract);
 
-            const network = await provider.getNetwork();
-            console.log("Connected network:", network.chainId);
-            // Fetch balance, decimals, and symbol
             const balance = await contract.balanceOf(walletAddress);
-            const decimals = await contract.decimals();
             const symbol = await contract.symbol();
-            // console.log(balance, decimals, symbol);
-            console.log(`${symbol}:`);
-            console.log("Raw Balance:", balance.toString());
-            console.log("Decimals:", decimals);
+            const decimals = await contract.decimals();
 
             return {
               symbol,
