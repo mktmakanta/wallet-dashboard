@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import { useState } from "react";
-import { Fingerprint } from "lucide-react";
+import { ArrowDown, Fingerprint } from "lucide-react";
+import { FaArrowDown } from "react-icons/fa";
 
 interface TokenBalance {
   symbol: string;
@@ -136,9 +137,15 @@ const App: React.FC = () => {
                     </a>
                   </div>
                 </div>
-                <div className="bg-fuchsia-500 px-4 py-2 rounded-full">
-                  <a href="#">Connect Wallet</a>
-                </div>
+                <button className="bg-fuchsia-500 px-4 py-2 rounded-full">
+                  {walletAddress ? (
+                    `${walletAddress.slice(0, 4)}...${walletAddress.slice(-6)}`
+                  ) : (
+                    <a href="#" onClick={connectWallet}>
+                      Connect Wallet
+                    </a>
+                  )}
+                </button>
                 <div className="md:hidden">
                   <button
                     onClick={() => setIsOpen(!isOpen)}
@@ -198,57 +205,74 @@ const App: React.FC = () => {
             )}
           </nav>
         </header>
-        <main className="relative z-10 text-white p-4">
-          <h1 className="text-2xl font-bold mb-4">Wallet Info Dashboard</h1>
+        <main className="relative z-10  mt-12 p-4">
+          <div className="rounded-lg  max-w-lg mx-auto space-y-8">
+            <h1 className="text-7xl font-semibold mb-4 text-white text-center ">
+              Swap anytime, <br /> anywhere.
+            </h1>
+            <div className="box relative space-y-1 ">
+              <div className="absolute inset-0 bg-neutral-700 size-12 rounded-md ring-2 max-auto z-20 text-white ring-neutral-400/50 top-[35%] left-[43%]   flex justify-center items-center">
+                <span>
+                  <ArrowDown />
+                </span>
+              </div>
+              {/* Wallet Info */}
 
-          {/* Connect Wallet Button */}
-          <button
-            onClick={connectWallet}
-            className={`${
-              loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500"
-            } text-white px-4 py-2 rounded mb-4`}
-            disabled={loading}
-          >
-            {ethBalance
-              ? "Disconnected"
-              : loading
-              ? "Connecting..."
-              : "Connect Wallet"}
-          </button>
+              <div className="sell-box relative ring-1 ring-white/30 bg-neutral-800/50  rounded-2xl p-4 text-white ">
+                <h1 className="text-xl">Sell</h1>
+                <div className="interaction">
+                  <div className="balance-token-select flex justify-between items-center ">
+                    <input
+                      type="number"
+                      name=""
+                      id=""
+                      className="text-4xl w-3/4 font-semibold appearance-none bg-transparent focus:outline-none"
+                    />
+                    <div className="select p-1 rounded-full ring-1 ring-white flex items-center">
+                      <div className="token-icon bg-red-400 size-8 rounded-full"></div>{" "}
+                      <span className=" text-xl ml-1 "> Token</span>
+                    </div>
+                  </div>
+                  <div className="balance-of-token mt-2">$ 0.00</div>
+                </div>
+              </div>
+              <div className="sell-box ring-1 ring-white/30 bg-neutral-700  rounded-2xl p-4 text-white ">
+                <h1 className="text-xl">Buy</h1>
+                <div className="interaction">
+                  <div className="balance-token-select flex justify-between items-center ">
+                    <input
+                      type="number"
+                      name=""
+                      id=""
+                      className="text-4xl w-3/4 font-semibold appearance-none bg-transparent focus:outline-none"
+                    />
+                    <div className="select p-1 rounded-full ring-1 ring-white flex items-center">
+                      <div className="token-icon bg-violet-400 size-8 rounded-full"></div>{" "}
+                      <span className=" text-xl ml-1 "> Token</span>
+                    </div>
+                  </div>
+                  <div className="balance-of-token mt-2">$ 0.00</div>
+                </div>
+              </div>
+              <button className="py-3 font-semibold text-xl text-white w-full text-center bg-fuchsia-500 rounded-lg">
+                Connect Wallet
+              </button>
+              {/* Token Balances */}
+              {/* {tokenBalances.length > 0 && (
+                <div className="bg-white shadow-md rounded p-4 w-full max-w-md mt-4">
+                  <h2 className="text-lg font-bold mb-2">Token Balances:</h2>
+                  {tokenBalances.map((token, index) => (
+                    <p key={index}>
+                      {token.symbol}: {token.balance}
+                    </p>
+                  ))}
+                </div>
+              )} */}
 
-          {/* Wallet Info */}
-          {walletAddress && (
-            <div className="bg-white shadow-md rounded p-4 w-full max-w-md">
-              <h2 className="text-lg font-bold">Wallet Address:</h2>
-              <p className="truncate">{walletAddress}</p>
-              <h2 className="text-lg font-bold mt-4">ETH Balance:</h2>
-              <p>{ethBalance ? `${ethBalance} ETH` : "Fetching balance..."}</p>
+              {/* Error Message */}
+              {error && <p className="text-red-500 mt-4">{error}</p>}
             </div>
-          )}
-          {/* Fetch Token Balances Button */}
-          {walletAddress && (
-            <button
-              onClick={fetchTokenBalances}
-              className="bg-green-500 text-white px-4 py-2 rounded mt-4 "
-            >
-              Fetch Token Balances
-            </button>
-          )}
-
-          {/* Token Balances */}
-          {tokenBalances.length > 0 && (
-            <div className="bg-white shadow-md rounded p-4 w-full max-w-md mt-4">
-              <h2 className="text-lg font-bold mb-2">Token Balances:</h2>
-              {tokenBalances.map((token, index) => (
-                <p key={index}>
-                  {token.symbol}: {token.balance}
-                </p>
-              ))}
-            </div>
-          )}
-
-          {/* Error Message */}
-          {error && <p className="text-red-500 mt-4">{error}</p>}
+          </div>
         </main>
       </div>
     </section>
