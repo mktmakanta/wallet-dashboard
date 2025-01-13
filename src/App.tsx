@@ -17,6 +17,9 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [tokenBalances, setTokenBalances] = useState<TokenBalance[]>([]);
 
+  // SWAP BUTTON STATE
+  const [isSwapped, setIsSwapped] = useState(false);
+
   const connectWallet = async (): Promise<void> => {
     setLoading(true);
     try {
@@ -211,47 +214,57 @@ const App: React.FC = () => {
               Swap anytime, <br /> anywhere.
             </h1>
             <div className="box relative space-y-1 ">
-              <div className="absolute inset-0 bg-neutral-700 size-12 rounded-md ring-2 max-auto z-20 text-white ring-neutral-400/50 top-[35%] left-[43%]   flex justify-center items-center">
+              <div
+                onClick={() => setIsSwapped((prev) => !prev)}
+                className="absolute inset-0 bg-neutral-700 size-12 rounded-md ring-2 max-auto z-20 text-white ring-neutral-400/50 top-[35%] left-[43%]   flex justify-center items-center"
+              >
                 <span>
                   <ArrowDown />
                 </span>
               </div>
-              {/* Wallet Info */}
-
-              <div className="sell-box relative ring-1 ring-white/30 bg-neutral-800/50  rounded-2xl p-4 text-white ">
-                <h1 className="text-xl">Sell</h1>
-                <div className="interaction">
-                  <div className="balance-token-select flex justify-between items-center ">
-                    <input
-                      type="number"
-                      name=""
-                      id=""
-                      className="text-4xl w-3/4 font-semibold appearance-none bg-transparent focus:outline-none"
-                    />
-                    <div className="select p-1 rounded-full ring-1 ring-white flex items-center">
-                      <div className="token-icon bg-red-400 size-8 rounded-full"></div>{" "}
-                      <span className=" text-xl ml-1 "> Token</span>
+              {/* Token swap container */}
+              <div className="token-swap-container flex flex-col gap-1">
+                <div
+                  style={{ order: isSwapped ? 1 : 0 }}
+                  className="wallet-token-box relative ring-1 ring-white/30 bg-neutral-700  rounded-2xl p-4 text-white "
+                >
+                  <h1 className="text-xl">{isSwapped ? "Sell" : "Buy"}</h1>
+                  <div className="interaction">
+                    <div className="balance-token-select flex justify-between items-center ">
+                      <input
+                        type="number"
+                        name=""
+                        id=""
+                        className="my-3 text-4xl w-3/4 font-semibold appearance-none bg-transparent focus:outline-none"
+                      />
+                      <div className="select p-1 rounded-full ring-1 ring-white flex items-center">
+                        <div className="token-icon bg-red-400 size-8 rounded-full"></div>{" "}
+                        <span className=" text-xl ml-1 "> Token</span>
+                      </div>
                     </div>
+                    <div className="balance-of-token mt-2">$ 0.00</div>
                   </div>
-                  <div className="balance-of-token mt-2">$ 0.00</div>
                 </div>
-              </div>
-              <div className="sell-box ring-1 ring-white/30 bg-neutral-700  rounded-2xl p-4 text-white ">
-                <h1 className="text-xl">Buy</h1>
-                <div className="interaction">
-                  <div className="balance-token-select flex justify-between items-center ">
-                    <input
-                      type="number"
-                      name=""
-                      id=""
-                      className="text-4xl w-3/4 font-semibold appearance-none bg-transparent focus:outline-none"
-                    />
-                    <div className="select p-1 rounded-full ring-1 ring-white flex items-center">
-                      <div className="token-icon bg-violet-400 size-8 rounded-full"></div>{" "}
-                      <span className=" text-xl ml-1 "> Token</span>
+                <div
+                  style={{ order: isSwapped ? 0 : 1 }}
+                  className="other-tokens-box ring-1 ring-white/30 bg-neutral-700  rounded-2xl p-4 text-white "
+                >
+                  <h1 className="text-xl">{isSwapped ? "Buy" : "Sell"}</h1>
+                  <div className="interaction">
+                    <div className="balance-token-select flex justify-between items-center ">
+                      <input
+                        type="number"
+                        name=""
+                        id=""
+                        className="my-3 text-4xl w-3/4 font-semibold appearance-none bg-transparent focus:outline-none"
+                      />
+                      <div className="select p-1 rounded-full ring-1 ring-white flex items-center">
+                        <div className="token-icon bg-violet-400 size-8 rounded-full"></div>{" "}
+                        <span className=" text-xl ml-1 "> Token</span>
+                      </div>
                     </div>
+                    <div className="balance-of-token mt-2">$ 0.00</div>
                   </div>
-                  <div className="balance-of-token mt-2">$ 0.00</div>
                 </div>
               </div>
               <button className="py-3 font-semibold text-xl text-white w-full text-center bg-fuchsia-500 rounded-lg">
